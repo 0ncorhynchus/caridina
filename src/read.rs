@@ -1,5 +1,5 @@
 use std::str::Chars;
-use datum::Datum;
+use types::Datum;
 
 const DELIMITERS: &'static [char] = &[' ', '(', ')', '"', ';'];
 

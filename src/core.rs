@@ -1,6 +1,6 @@
 use std::result;
 use error::*;
-use datum::Datum;
+use types::Datum;
 
 type Result<T> = result::Result<T, ProcedureCallError>;
 

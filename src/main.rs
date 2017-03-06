@@ -1,5 +1,5 @@
 mod error;
-mod datum;
+mod types;
 mod core;
 mod read;
 
@@ -10,7 +10,7 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use ::error::*;
-    use ::datum::*;
+    use ::types::*;
     use ::core::*;
     use ::read::*;
 
