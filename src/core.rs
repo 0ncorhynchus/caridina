@@ -1,10 +1,7 @@
-use std::result;
 use error::*;
 use types::Datum;
 
-type Result<T> = result::Result<T, ProcedureCallError>;
-
-fn add(args: &[Datum]) -> Result<Datum> {
+fn add(args: &[Datum]) -> ProcedureResult<Datum> {
     let mut sum = 0.0;
     for datum in args {
         match *datum {
@@ -15,7 +12,7 @@ fn add(args: &[Datum]) -> Result<Datum> {
     Ok(Datum::Number(sum))
 }
 
-pub fn call(operator: &Datum, args: &[Datum]) -> Result<Datum> {
+pub fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Datum> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
@@ -28,7 +25,7 @@ pub fn call(operator: &Datum, args: &[Datum]) -> Result<Datum> {
     }
 }
 
-pub fn eval(expr: Datum) -> Result<Datum> {
+pub fn eval(expr: Datum) -> ProcedureResult<Datum> {
     match expr {
         Datum::List(list) => call(&list[0], &list[1..]),
         _ => Ok(expr)
