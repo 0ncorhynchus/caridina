@@ -1,15 +1,28 @@
+use std::str::Chars;
 use datum::Datum;
 
-pub fn read(input: &str) -> Datum {
-    let chars = input.trim_left().chars();
+const DELIMITERS: &'static [char] = &[' ', '(', ')', '"', ';'];
 
-    let mut repr = String::new();
+fn is_delimiter(c: char) -> bool {
+    DELIMITERS.into_iter().any(|&delimiter| delimiter == c)
+}
+
+pub fn next_token(chars: &mut Chars) -> (String, char) {
+    let mut token = String::new();
     for c in chars {
-        if c == ' ' {
-            break;
+        if is_delimiter(c) {
+            return (token, c);
+        } else {
+            token.push(c);
         }
-        repr.push(c);
     }
+    (token, ' ')
+}
+
+pub fn read(input: &str) -> Datum {
+    let mut chars = input.trim_left().chars();
+
+    let (repr, _) = next_token(&mut chars);
 
     if repr == "#t" {
         Datum::Boolean(true)
@@ -28,6 +41,17 @@ pub fn read(input: &str) -> Datum {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_next_token() {
+        let repr = "#t #f (var 404)";
+        let mut chars = repr.chars();
+        assert_eq!(("#t".to_string(), ' '),  next_token(&mut chars));
+        assert_eq!(("#f".to_string(), ' '),  next_token(&mut chars));
+        assert_eq!(("".to_string(), '('),    next_token(&mut chars));
+        assert_eq!(("var".to_string(), ' '), next_token(&mut chars));
+        assert_eq!(("404".to_string(), ')'), next_token(&mut chars));
+    }
 
     #[test]
     fn test_read() {
