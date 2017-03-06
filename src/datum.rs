@@ -14,4 +14,6 @@ pub enum Datum {
      */
     List(Vec<Datum>),
     Vector(Vec<Datum>),
+
+    Empty
 }
