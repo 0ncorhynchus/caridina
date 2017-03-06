@@ -26,23 +26,23 @@ impl<R: Read> CharReader<R> {
     }
 }
 
-fn get_repr<R: Read>(input: &mut CharReader<R>) -> String {
+pub fn read<R: Read>(input: &mut CharReader<R>) -> Datum {
     let mut repr = String::new();
+
+    while let Some(c) = input.next_char().ok() {
+        if c != ' ' {
+            repr.push(c);
+            break;
+        }
+    }
+
     while let Some(c) = input.next_char().ok() {
         if c == ' ' {
-            if repr.is_empty() {
-                continue;
-            } else {
-                break;
-            }
+            break;
         }
         repr.push(c);
     }
-    repr
-}
 
-pub fn read<R: Read>(input: &mut CharReader<R>) -> Datum {
-    let repr = get_repr(input);
     if repr == "#t" {
         Datum::Boolean(true)
     } else if repr == "#f" {
