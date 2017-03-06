@@ -18,10 +18,9 @@ fn add(args: &[Datum]) -> Result<Datum> {
 pub fn call(operator: &Datum, args: &[Datum]) -> Result<Datum> {
     match *operator {
         Datum::Symbol(ref op) => {
-            if op == "+" {
-                add(args)
-            } else {
-                Err(ProcedureCallError::UnknownOperator(
+            match op.as_str() {
+                "+" => add(args),
+                _ => Err(ProcedureCallError::UnknownOperator(
                         op.to_string()))
             }
         },
