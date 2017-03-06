@@ -52,14 +52,14 @@ fn read_list_datum(chars: &mut Chars) -> Vec<Datum> {
     let mut vec = vec![];
     loop {
         let (token, delimiter) = next_token(chars);
+        if !token.is_empty() {
+            vec.push(convert_simple_token(&token));
+        }
         match delimiter {
-            ')' => {
-                vec.push(convert_simple_token(&token));
-                break;
-            },
+            ')' => break,
             '(' => vec.push(Datum::List(read_list_datum(chars))),
             '"' => vec.push(Datum::String(read_string_datum(chars))),
-            _ => vec.push(convert_simple_token(&token)),
+            _ => {}
         }
     }
     vec
@@ -70,14 +70,14 @@ pub fn read(input: &str) -> Datum {
 
     let (token, delimiter) = next_token(&mut chars);
 
-    if token.is_empty() {
-        match delimiter {
-            '"' => Datum::String(read_string_datum(&mut chars)),
-            '(' => Datum::List(read_list_datum(&mut chars)),
-            _   => Datum::Empty
-        }
-    } else {
-        convert_simple_token(&token)
+    if !token.is_empty() {
+        return convert_simple_token(&token);
+    }
+
+    match delimiter {
+        '"' => Datum::String(read_string_datum(&mut chars)),
+        '(' => Datum::List(read_list_datum(&mut chars)),
+        _   => Datum::Empty
     }
 }
 
@@ -104,8 +104,21 @@ mod tests {
         assert_eq!(Datum::Symbol("var".to_string()), read("var"));
         assert_eq!(Datum::String("spam ham".to_string()),
                    read("\"spam ham\""));
+
         assert_eq!(Datum::List(vec![Datum::Boolean(true),
                                     Datum::Boolean(false)]),
                    read("(#t #f)"));
+        assert_eq!(Datum::List(vec![
+                       Datum::Boolean(true),
+                       Datum::List(vec![
+                           Datum::Symbol("a".to_string()),
+                           Datum::Number(1f64)])]),
+                   read("(#t (a 1))"));
+        assert_eq!(Datum::List(vec![
+                       Datum::Boolean(true),
+                       Datum::List(vec![
+                           Datum::Symbol("a".to_string()),
+                           Datum::Number(1f64)])]),
+                   read("(#t(a 1))"));
     }
 }
