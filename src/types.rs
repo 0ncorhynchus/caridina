@@ -31,21 +31,3 @@ pub enum Datum {
     List(Vec<Datum>),
     Vector(Vec<Datum>),
 }
-
-pub type Procedure = Fn(&[Datum]) -> Datum;
-
-pub struct Environment {
-    procedure_map: HashMap<String, Box<Procedure>>,
-}
-
-impl Environment {
-    pub fn new() -> Self {
-        Environment {
-            procedure_map: HashMap::new(),
-        }
-    }
-
-    pub fn register_procedure(&mut self, name: &str, procedure: Box<Procedure>) {
-        self.procedure_map.insert(name.to_string(), procedure);
-    }
-}
