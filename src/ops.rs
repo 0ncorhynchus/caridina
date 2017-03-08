@@ -2,6 +2,20 @@ use error::*;
 use types::*;
 use core::eval;
 
+/// The syntax `if`
+///
+/// (if <test> <consequent> <alternate>)
+/// (if <test> <consequent>)
+///
+/// # Scheme Example
+///
+/// ```lisp
+/// (if (> 3 2) 'yes 'no)  ; = 'yes
+/// (if (> 2 3) 'yes 'no)  ; = 'no
+/// (if (> 3 2)
+///     (- 3 2)
+///     (+ 3 2))           ; = 1
+/// ```
 pub fn if_proc(args:&[Datum]) -> Result<Object> {
     match args.len() {
         3 => {
@@ -22,6 +36,17 @@ pub fn if_proc(args:&[Datum]) -> Result<Object> {
     }
 }
 
+/// The procedure `+`
+///
+/// (+ z_1 ...)
+///
+/// # Scheme Example
+///
+/// ```lisp
+/// (+ 3 4)  ; = 7
+/// (+ 3)    ; = 3
+/// (+)      ; = 0
+/// ```
 pub fn add(args: &[Datum]) -> Result<Object> {
     let mut sum = 0.0;
     for datum in args {
