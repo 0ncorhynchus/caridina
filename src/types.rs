@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug, PartialEq)]
 pub enum Object {
     Boolean(bool),
@@ -10,6 +12,20 @@ pub enum Object {
     Port,
     Procedure,
     Empty,
+}
+
+impl fmt::Display for Object {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Object::Boolean(flg)  => write!(f, "{}", flg),
+            Object::Symbol(ref s) => write!(f, "'{}", s),
+            Object::Number(x)     => write!(f, "{}", x),
+            Object::Char(c)       => write!(f, "\\{}", c),
+            Object::String(ref s) => write!(f, "\"{}\"", s),
+            Object::Empty         => write!(f, "()"),
+            _ => write!(f, "Cannot display")
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]

@@ -4,8 +4,34 @@ mod ops;
 mod core;
 mod read;
 
+use std::io::{stdin, stdout, Write};
+use read::read;
+use core::eval;
+
 fn main() {
-    println!("Hello, world!");
+    let mut input = String::new();
+    loop {
+        print!("> ");
+        stdout().flush().unwrap();
+
+        input.clear();
+        match stdin().read_line(&mut input) {
+            Ok(_) => {
+                if input.trim() == "(exit)" {
+                    break;
+                }
+                match read(&input) {
+                    Some(datum) => match eval(&datum) {
+                        Ok(object) => println!("{}", object),
+                        Err(error) => println!("{}", error)
+                    },
+                    None =>
+                        println!("Can't read data from {}.", input)
+                }
+            },
+            Err(error) => println!("Error has occurred: {}", error)
+        }
+    }
 }
 
 #[cfg(test)]
