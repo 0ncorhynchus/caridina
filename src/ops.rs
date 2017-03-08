@@ -25,8 +25,8 @@ pub fn if_proc(args:&[Datum]) -> Result<Object> {
 pub fn add(args: &[Datum]) -> Result<Object> {
     let mut sum = 0.0;
     for datum in args {
-        match *datum {
-            Datum::Number(x) => sum += x,
+        match eval(datum)? {
+            Object::Number(x) => sum += x,
             _ => return Err(Error::InvalidArgument)
         }
     }
