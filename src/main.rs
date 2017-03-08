@@ -9,7 +9,6 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use ::error::*;
     use ::types::*;
     use ::core::*;
     use ::read::*;

@@ -12,7 +12,7 @@ fn add(args: &[Datum]) -> ProcedureResult<Object> {
     Ok(Object::Number(sum))
 }
 
-pub fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Object> {
+fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Object> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
