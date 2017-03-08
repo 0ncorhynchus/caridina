@@ -1,12 +1,12 @@
 use error::*;
 use types::*;
 
-pub fn add(args: &[Datum]) -> ProcedureResult<Object> {
+pub fn add(args: &[Datum]) -> Result<Object> {
     let mut sum = 0.0;
     for datum in args {
         match *datum {
             Datum::Number(x) => sum += x,
-            _ => return Err(ProcedureCallError::InvalidArgument)
+            _ => return Err(Error::InvalidArgument)
         }
     }
     Ok(Object::Number(sum))

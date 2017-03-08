@@ -2,20 +2,20 @@ use error::*;
 use types::*;
 use ops;
 
-fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Object> {
+fn call(operator: &Datum, args: &[Datum]) -> Result<Object> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
                 "+" => ops::add(args),
-                _ => Err(ProcedureCallError::UnknownOperator(
+                _ => Err(Error::UnknownOperator(
                         op.to_string()))
             }
         },
-        _ => Err(ProcedureCallError::NotCallable)
+        _ => Err(Error::NotCallable)
     }
 }
 
-pub fn eval(expr: &Datum) -> ProcedureResult<Object> {
+pub fn eval(expr: &Datum) -> Result<Object> {
     match *expr {
         Datum::Boolean(flg)     => Ok(Object::Boolean(flg)),
         Datum::Number(x)        => Ok(Object::Number(x)),
