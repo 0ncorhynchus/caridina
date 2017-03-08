@@ -1,7 +1,7 @@
 use error::*;
-use types::Datum;
+use types::*;
 
-fn add(args: &[Datum]) -> ProcedureResult<Datum> {
+fn add(args: &[Datum]) -> ProcedureResult<Object> {
     let mut sum = 0.0;
     for datum in args {
         match *datum {
@@ -9,10 +9,10 @@ fn add(args: &[Datum]) -> ProcedureResult<Datum> {
             _ => return Err(ProcedureCallError::InvalidArgument)
         }
     }
-    Ok(Datum::Number(sum))
+    Ok(Object::Number(sum))
 }
 
-pub fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Datum> {
+pub fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Object> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
@@ -25,10 +25,24 @@ pub fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Datum> {
     }
 }
 
-pub fn eval(expr: Datum) -> ProcedureResult<Datum> {
-    match expr {
-        Datum::List(list) => call(&list[0], &list[1..]),
-        _ => Ok(expr)
+pub fn eval(expr: &Datum) -> ProcedureResult<Object> {
+    match *expr {
+        Datum::Boolean(flg)     => Ok(Object::Boolean(flg)),
+        Datum::Number(x)        => Ok(Object::Number(x)),
+        Datum::Character(c)     => Ok(Object::Char(c)),
+        Datum::String(ref s)    => Ok(Object::String(s.clone())),
+        Datum::Symbol(ref s)    => Ok(Object::Symbol(s.clone())),
+        Datum::List(ref list)   => call(&list[0], &list[1..]),
+        Datum::Vector(ref list) => {
+            let results: Vec<_> = list.iter()
+                                      .map(|datum| eval(datum))
+                                      .collect();
+            let mut inner = vec!{};
+            for x in results {
+                inner.push(x?);
+            }
+            Ok(Object::Vector(inner))
+        }
     }
 }
 
@@ -43,7 +57,7 @@ mod tests {
         let result = call(&ops, &args);
 
         assert!(result.is_ok());
-        assert_eq!(Datum::Number(3.0), result.unwrap());
+        assert_eq!(Object::Number(3.0), result.unwrap());
     }
 
     #[test]
@@ -54,10 +68,10 @@ mod tests {
                 Datum::Number(1.0),
                 Datum::Number(2.0)
             ]);
-        let result = eval(expr);
+        let result = eval(&expr);
 
         assert!(result.is_ok());
-        assert_eq!(Datum::Number(3.0), result.unwrap());
+        assert_eq!(Object::Number(3.0), result.unwrap());
     }
 }
 
