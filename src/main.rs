@@ -1,5 +1,6 @@
 mod error;
 mod types;
+mod ops;
 mod core;
 mod read;
 

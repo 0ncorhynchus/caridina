@@ -1,22 +1,12 @@
 use error::*;
 use types::*;
-
-fn add(args: &[Datum]) -> ProcedureResult<Object> {
-    let mut sum = 0.0;
-    for datum in args {
-        match *datum {
-            Datum::Number(x) => sum += x,
-            _ => return Err(ProcedureCallError::InvalidArgument)
-        }
-    }
-    Ok(Object::Number(sum))
-}
+use ops;
 
 fn call(operator: &Datum, args: &[Datum]) -> ProcedureResult<Object> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
-                "+" => add(args),
+                "+" => ops::add(args),
                 _ => Err(ProcedureCallError::UnknownOperator(
                         op.to_string()))
             }
