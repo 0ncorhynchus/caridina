@@ -1,7 +1,8 @@
 use std::str::Chars;
 use types::Datum;
 
-const DELIMITERS: &'static [char] = &[' ', '(', ')', '"', ';'];
+const DELIMITERS: &'static [char]
+    = &[' ', '\n', '\t', '(', ')', '"', ';'];
 
 fn is_delimiter(c: char) -> bool {
     DELIMITERS.into_iter().any(|&delimiter| delimiter == c)
