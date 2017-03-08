@@ -2,6 +2,7 @@ use std::result;
 
 #[derive(Debug)]
 pub enum Error {
+    SyntaxError,
     InvalidArgument,
     NotCallable,
     UnknownOperator(String),

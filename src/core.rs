@@ -6,7 +6,8 @@ fn call(operator: &Datum, args: &[Datum]) -> Result<Object> {
     match *operator {
         Datum::Symbol(ref op) => {
             match op.as_str() {
-                "+" => ops::add(args),
+                "+"  => ops::add(args),
+                "if" => ops::if_proc(args),
                 _ => Err(Error::UnknownOperator(
                         op.to_string()))
             }
@@ -22,6 +23,7 @@ pub fn eval(expr: &Datum) -> Result<Object> {
         Datum::Character(c)     => Ok(Object::Char(c)),
         Datum::String(ref s)    => Ok(Object::String(s.clone())),
         Datum::Symbol(ref s)    => Ok(Object::Symbol(s.clone())),
+        Datum::Empty            => Ok(Object::Empty),
         Datum::List(ref list)   => call(&list[0], &list[1..]),
         Datum::Vector(ref list) => {
             let results: Vec<_> = list.iter()

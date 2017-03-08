@@ -22,6 +22,7 @@ pub enum Datum {
     Character(char),
     String(String),
     Symbol(String),
+    Empty,
 
     /*
      * Compound Datum
