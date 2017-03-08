@@ -8,8 +8,7 @@ fn call(operator: &Datum, args: &[Datum]) -> Result<Object> {
             match op.as_str() {
                 "+"  => ops::add(args),
                 "if" => ops::if_proc(args),
-                _ => Err(Error::UnknownOperator(
-                        op.to_string()))
+                _ => Err(Error::UnknownOperator(op.to_string()))
             }
         },
         _ => Err(Error::NotCallable)

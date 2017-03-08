@@ -11,13 +11,13 @@ use core::eval;
 fn main() {
     let mut input = String::new();
     loop {
-        print!("> ");
+        print!("caridina> ");
         stdout().flush().unwrap();
 
         input.clear();
         match stdin().read_line(&mut input) {
             Ok(_) => {
-                if input.trim() == "(exit)" {
+                if input.trim().to_lowercase() == "(exit)" {
                     break;
                 }
                 match read(&input) {
@@ -29,7 +29,7 @@ fn main() {
                         println!("Can't read data from {}.", input)
                 }
             },
-            Err(error) => println!("Error has occurred: {}", error)
+            Err(error) => println!("{}", error)
         }
     }
 }
