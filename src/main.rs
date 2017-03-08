@@ -18,8 +18,8 @@ mod tests {
     fn test() {
         let expr = read("(+ 1 2)");
         assert!(expr.is_some());
-        let result = eval(expr.unwrap());
+        let result = eval(&expr.unwrap());
         assert!(result.is_ok());
-        assert_eq!(Datum::Number(3.0), result.unwrap());
+        assert_eq!(Object::Number(3.0), result.unwrap());
     }
 }
