@@ -7,6 +7,7 @@ fn call(operator: &Datum, args: &[Datum]) -> Result<Object> {
         Datum::Symbol(ref op) => {
             match op.as_str() {
                 "+"  => ops::add(args),
+                "*"  => ops::mul(args),
                 "if" => ops::if_proc(args),
                 _ => Err(Error::UnknownOperator(op.to_string()))
             }

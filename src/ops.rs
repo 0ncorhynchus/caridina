@@ -36,6 +36,13 @@ pub fn if_proc(args:&[Datum]) -> Result<Object> {
     }
 }
 
+fn unwrap_number(object: Object) -> Result<f64> {
+    match object {
+        Object::Number(x) => Ok(x),
+        _ => Err(Error::InvalidArgument)
+    }
+}
+
 /// The procedure `+`
 ///
 /// (+ z_1 ...)
@@ -50,12 +57,17 @@ pub fn if_proc(args:&[Datum]) -> Result<Object> {
 pub fn add(args: &[Datum]) -> Result<Object> {
     let mut sum = 0.0;
     for datum in args {
-        match eval(datum)? {
-            Object::Number(x) => sum += x,
-            _ => return Err(Error::InvalidArgument)
-        }
+        sum += unwrap_number(eval(datum)?)?;
     }
     Ok(Object::Number(sum))
+}
+
+pub fn mul(args: &[Datum]) -> Result<Object> {
+    let mut prod = 1.0;
+    for datum in args {
+        prod *= unwrap_number(eval(datum)?)?;
+    }
+    Ok(Object::Number(prod))
 }
 
 #[cfg(test)]
